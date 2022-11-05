@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "439298272309",
+    "project_id": "busticketingsystem-53c45",
+    "storage_bucket": "busticketingsystem-53c45.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439298272309:android:e396065cf3511e75e5157c",
+        "android_client_info": {
+          "package_name": "com.example.bus_ticketing_system"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "439298272309-r83nslbbsa936ghrcvr73qa9etdtmpav.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmwqJbxGRq9vu76W42DTL2vu5ONecI_sk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "439298272309-r83nslbbsa936ghrcvr73qa9etdtmpav.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
