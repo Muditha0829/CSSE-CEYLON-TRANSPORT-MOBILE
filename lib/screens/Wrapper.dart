@@ -1,3 +1,4 @@
+import 'package:bus_ticketing_system/screens/authenticate/email_sign_in.dart';
 import 'package:bus_ticketing_system/screens/authenticate/register.dart';
 import 'package:bus_ticketing_system/screens/authenticate/sign_in.dart';
 // import 'package:bus_ticketing_system/screens/home/home.dart';
@@ -8,6 +9,6 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SignIn();
+    return const EmailSignin();
   }
 }

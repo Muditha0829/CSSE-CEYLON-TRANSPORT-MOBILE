@@ -59,21 +59,22 @@ class AuthService {
 
   }
 
-  //Register with email and password
-  Future register(_firstName,_lastName,_age,_email,_password) async {
+  //Register with email and password - Local
+  Future registerLocal(fullName,nic,phoneNo,email,password) async {
     try {
 
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _email,
-        password: _password,
+        email: email,
+        password: password,
       );
 
-      FirebaseFirestore.instance.collection('users').doc(userCredential.user?.uid).set({
+      FirebaseFirestore.instance.collection('userData').doc(userCredential.user?.uid).set({
         'uid' : userCredential.user?.uid,
-        'firstName' : _firstName,
-        'lastName' : _lastName,
-        'age' : _age,
-        'email' : _email,
+        'fullName' : fullName,
+        'nic' : nic,
+        'phoneNo': phoneNo,
+        'userType' : 'local',
+        'email' : email,
       });
       return 'Success';
 
@@ -90,6 +91,38 @@ class AuthService {
     }
   }
 
+
+  //Register with email and password - Local
+  Future registerForeign(fullName,passportNo,phoneNo,email,password) async {
+    try {
+
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      FirebaseFirestore.instance.collection('userData').doc(userCredential.user?.uid).set({
+        'uid' : userCredential.user?.uid,
+        'fullName' : fullName,
+        'passportNo' : passportNo,
+        'phoneNo': phoneNo,
+        'userType' : 'foreign',
+        'email' : email,
+      });
+      return 'Success';
+
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        return 'The password provided is too weak.';
+      } else if (e.code == 'email-already-in-use') {
+        return 'The account already exists for that email.';
+      } else {
+        return e.message;
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
   //Sign out
   Future signOut() async {
     try{
