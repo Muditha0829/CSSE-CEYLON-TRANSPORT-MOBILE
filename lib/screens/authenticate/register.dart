@@ -21,7 +21,7 @@ extension NumberValidator on String {
 
 extension NameValidator on String {
   bool isValidName(){
-    return RegExp(r'^[A-Za-z]+$').hasMatch(this);
+    return RegExp(r'^[A-Za-z]').hasMatch(this);
   }
 }
 
