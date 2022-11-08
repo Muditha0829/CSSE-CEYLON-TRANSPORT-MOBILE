@@ -5,6 +5,9 @@ import '../models/user.dart';
 class AuthService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+
+
 
   // Create user object from firebaseUser
   modelUser? _userFromFirebaseUser(UserCredential result) {
@@ -123,6 +126,20 @@ class AuthService {
       return e.toString();
     }
   }
+
+  //Get collection data from the firebase
+  Future getUserData() async {
+    final user = _auth.currentUser;
+    _fireStore.collection('userData').doc(user?.uid) .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        print('Document data: ${documentSnapshot.data()}');
+      } else {
+        print('Document does not exist on the database');
+      }
+    });
+  }
+
   //Sign out
   Future signOut() async {
     try{
