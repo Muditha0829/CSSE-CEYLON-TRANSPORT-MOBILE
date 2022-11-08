@@ -36,6 +36,10 @@ dependencies:
   firebase_auth: ^4.0.2
   cloud_firestore: ^4.0.3
   cupertino_icons: ^1.0.2
+  #Flutter_QR
+  qr_flutter: ^4.0.0
+  #scan qr code
+  qr_code_scanner: ^1.0.1
 
 dev_dependencies:
   flutter_test:

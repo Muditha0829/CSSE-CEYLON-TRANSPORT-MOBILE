@@ -1,4 +1,7 @@
 import 'package:bus_ticketing_system/screens/home/profile.dart';
+import 'package:bus_ticketing_system/screens/transaction/GenerateQr.dart';
+import 'package:bus_ticketing_system/screens/transaction/ScanQr.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/auth.dart';
@@ -17,6 +20,8 @@ class _HomeState extends State<Home> {
 
   final AuthService _auth = AuthService();
 
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,45 +32,7 @@ class _HomeState extends State<Home> {
           title: const Text('Home'),
         ),
         body:  Center(
-          child: Wrap(
-            children: <Widget> [
-              Column(
-                children: <Widget> [
-                  const Text('Seems like you have signed in !'),
-                  ElevatedButton(
-                    onPressed: () async {
-                      dynamic result = await _auth.signOut();
-                      print(result);
-                      if(result=='Success'){
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Successfully Signed Out'),
-                            ));
-                        Navigator.push(context, MaterialPageRoute(builder: (_)=> const EmailSignin()));
-                      }
-
-                    },
-                    child: const Text('Sign Out'),
-
-                  ),
-          ElevatedButton(
-            onPressed: () async {
-              dynamic result = await _auth.signOut();
-              print(result);
-              if(result=='Success'){
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Successfully Signed Out'),
-                    ));
-                Navigator.push(context, MaterialPageRoute(builder: (_)=> const EmailSignin()));
-              }
-
-            },
-            child: const Text('My Profile'),)
-                ],
-              )
-            ],
-          ),
-
-
+          child: Text("Home"),
         ),
       drawer: Drawer(
         child: ListView(
