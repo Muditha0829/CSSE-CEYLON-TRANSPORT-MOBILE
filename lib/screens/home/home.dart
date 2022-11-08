@@ -1,3 +1,6 @@
+import 'package:bus_ticketing_system/screens/transaction/GenerateQr.dart';
+import 'package:bus_ticketing_system/screens/transaction/ScanQr.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/auth.dart';
@@ -15,6 +18,8 @@ class _HomeState extends State<Home> {
 
 
   final AuthService _auth = AuthService();
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +46,20 @@ class _HomeState extends State<Home> {
                             ));
                         Navigator.push(context, MaterialPageRoute(builder: (_)=> const EmailSignin()));
                       }
-
                     },
                     child: const Text('Sign Out'),
+                  ),
+                  ElevatedButton(
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (_)=> GenerateQr(auth.currentUser!.uid)));
+                      },
+                      child: const Text('Show QR'),
+                  ),
+                  ElevatedButton(
+                    onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (_)=> const ScanQr()));
+                    },
+                    child: const Text('Test1'),
                   ),
                 ],
               )
