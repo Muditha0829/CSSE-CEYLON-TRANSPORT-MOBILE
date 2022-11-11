@@ -155,7 +155,7 @@ class _TransactionProfileState extends State<TransactionProfile> {
     }else{
 
       await FirebaseFirestore.instance.collection('userData').doc(widget.singleUser.uid).update({
-        "amount": int.parse(singleUser.amount) - int.parse(amountController.text)
+        "amount": (int.parse(singleUser.amount) - int.parse(amountController.text)).toString(),
       });
       
       final transaction = FirebaseFirestore.instance.collection('transaction').doc();
