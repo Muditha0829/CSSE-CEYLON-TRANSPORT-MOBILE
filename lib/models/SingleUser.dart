@@ -5,6 +5,7 @@ class SingleUser {
   final String passportNo;
   final String fullName;
   final String email;
+  final String amount;
   final String userType;
 
   SingleUser({
@@ -14,6 +15,7 @@ class SingleUser {
     required this.passportNo,
     required this.fullName,
     required this.email,
+    required this.amount,
     required this.userType
   });
 
@@ -25,6 +27,7 @@ class SingleUser {
         'passportNo' : passportNo,
         'fullName': fullName,
         'email': email,
+        'amount': amount,
         'userType':userType
       };
 
@@ -36,15 +39,7 @@ class SingleUser {
         passportNo: json['passportNo'],
         fullName: json['fullName'],
         email: json['email'],
+        amount: json['amount'],
         userType: json['userType']
       );
-
-  SingleUser.fromSnapshot(snapshot):
-        uid = snapshot.data()['uid'],
-        phoneNo = snapshot.data()['phoneNo'],
-        nic = snapshot.data()['nic'],
-        passportNo = snapshot.data()['passportNo'],
-        fullName = snapshot.data()['fullName'],
-        email = snapshot.data()['email'],
-        userType = snapshot.data()['userType'];
 }

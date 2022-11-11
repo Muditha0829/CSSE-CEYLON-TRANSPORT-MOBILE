@@ -1,5 +1,8 @@
 import 'package:bus_ticketing_system/screens/authenticate/email_sign_in.dart';
 import 'package:bus_ticketing_system/screens/home/profile.dart';
+import 'package:bus_ticketing_system/screens/transaction/GenerateQr.dart';
+import 'package:bus_ticketing_system/screens/transaction/ScanQr.dart';
+import 'package:bus_ticketing_system/screens/transaction/TransactionList.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -32,9 +35,7 @@ class _HomeState extends State<Home> {
       setState(() {
         UserId = result!;
       });
-    }
-
-    );
+    });
 
 
     super.initState();
@@ -87,11 +88,26 @@ class _HomeState extends State<Home> {
                 Navigator.push(context, MaterialPageRoute(builder: (_)=>  Profile(UserId)));
               },
             ),
+            ListTile(
+              title:  const Text('Transaction List'),
+              onTap: (){
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (_)=> const TransactionList()));
+              },
+            ),
              ListTile(
               title:  const Text('QR Code',style: TextStyle(fontSize: 18)),
                onTap: (){
-                 // Navigator.pop(context);
+                 final user = auth.currentUser;
+                 String? userId = user?.uid;
+                 Navigator.push(context, MaterialPageRoute(builder: (_)=> GenerateQr(userId!)));
                },
+            ),
+            ListTile(
+              title:  const Text('Scan QR Code'),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (_)=> const ScanQr()));
+              },
             ),
              ListTile(
               title:  const Text('Notifications',style: TextStyle(fontSize: 18)),
