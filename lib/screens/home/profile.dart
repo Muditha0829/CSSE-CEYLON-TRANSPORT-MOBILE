@@ -1,6 +1,9 @@
+import 'package:bus_ticketing_system/screens/authenticate/email_sign_in.dart';
+import 'package:bus_ticketing_system/screens/home/updatepassword.dart';
 import 'package:bus_ticketing_system/screens/home/updateprofile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/SingleUser.dart';
@@ -18,6 +21,7 @@ class Profile extends StatefulWidget {
 }
 
 final AuthService auth = AuthService();
+final FirebaseAuth _auth = FirebaseAuth.instance;
 final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
 class _ProfileState extends State<Profile> {
@@ -44,7 +48,14 @@ class _ProfileState extends State<Profile> {
               ? const Center(child: Text('No User'))
               : buildUser(user);
         }else{
-          return const Center(child: Text('No Data ! '));
+          return const Scaffold(
+            // backgroundColor: ,
+            body: Center(
+              child: CircularProgressIndicator(
+                color: Colors.blueAccent,
+              ),
+            ),
+          );
         }
       },
     )
@@ -57,7 +68,11 @@ class _ProfileState extends State<Profile> {
     final snapshot = await docUser.get();
 
     if(snapshot.exists){
+      if (kDebugMode) {
+        print(snapshot.data()!);
+      }
       return SingleUser.fromJson(snapshot.data()!);
+
     }
     return null;
  }
@@ -69,7 +84,7 @@ class _ProfileState extends State<Profile> {
           padding: const EdgeInsets.symmetric(
             vertical: 20.0,
           ),
-          color: Theme.of(context).primaryColor,
+          color: Colors.blueAccent,
           child: Column(
             children: [
               Text(
@@ -158,8 +173,8 @@ class _ProfileState extends State<Profile> {
                     Column(
                       children: <Widget> [
                         Padding(padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                          child: Text(user.nic,
-                            style: const TextStyle(fontSize: 20),),)
+                          child: buildNicPassport(user)
+                        )
                       ],
                     )
                   ],
@@ -182,6 +197,24 @@ class _ProfileState extends State<Profile> {
                     )
                   ],
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children:<Widget> [
+                    Column(
+                      children: const <Widget>[
+                        Icon(Icons.person,size: 40.0,),
+
+                      ],
+                    ),
+                    Column(
+                      children: <Widget> [
+                        Padding(padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: Text(user.userType,
+                            style: const TextStyle(fontSize: 20),),)
+                      ],
+                    )
+                  ],
+                ),
       ],
     ),
     ),
@@ -196,14 +229,46 @@ class _ProfileState extends State<Profile> {
               child: const Text('Update Profile')),),
         Padding(padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ElevatedButton(onPressed: (){
-
+            Navigator.push(context, MaterialPageRoute(builder: (_)=> const UpdatePassword()));
           },
               child: const Text('Update Password')),),
         Padding(padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               onPressed: (){
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Delete Account'),
+                    content: const Text('If you delete this account, you will be lost your entered data and this account cannot be recovered again'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Cancel'),
+                        child: const Text('Cancel'),
 
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.pop(context, 'OK');
+                          dynamic result = deleteUser(user.uid);
+                          if(result!=null){
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Account Deleted Successfully'),
+                                ));
+                            Navigator.push(context, MaterialPageRoute(builder: (_)=>  EmailSignin()));
+
+                          }else{
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(result),
+                                ));
+                          }
+
+                        },
+                        child: const Text('Delete',style: TextStyle(color: Colors.red),),
+                      ),
+                    ],
+                  ),
+                );
               },
               child: const Text('Delete Account')),
 
@@ -213,6 +278,31 @@ class _ProfileState extends State<Profile> {
   }
 
 
+}
+
+deleteUser(userId) async {
+  try{
+    _auth.currentUser?.delete();
+    try{
+      FirebaseFirestore.instance.collection('userData').doc(userId).delete();
+
+      return 'Success';
+    }catch(e){
+      return e.toString();
+    }
+    return 'Success';
+  }catch(e){
+    return e.toString();
+  }
+
+}
+
+Widget buildNicPassport(SingleUser user) {
+  if(user.passportNo==''){
+    return Text(user.nic,style: const TextStyle(fontSize: 20));
+  }else{
+    return Text(user.passportNo,style: const TextStyle(fontSize: 20));
+  }
 }
 
 

@@ -82,6 +82,7 @@ class AuthService {
         'phoneNo': phoneNo,
         'userType' : 'local',
         'email' : email,
+        'passportNo' : ''
       });
       return 'Success';
 
@@ -115,6 +116,7 @@ class AuthService {
         'phoneNo': phoneNo,
         'userType' : 'foreign',
         'email' : email,
+        'nic' : ''
       });
       return 'Success';
 
@@ -131,24 +133,60 @@ class AuthService {
     }
   }
 
-  //Get collection data from the firebase
-  // Future getUserData() async {
-  //   final user = _auth.currentUser;
-  //   _fireStore.collection('userData').doc(user?.uid) .get()
-  //       .then((DocumentSnapshot documentSnapshot) {
-  //     if (documentSnapshot.exists) {
-  //       Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-  //       // print('Document data: ${documentSnapshot.data()}');
-  //       // print('Full Name: ${data['fullName']}');
-  //       // print(data['fullName']);
-  //       return data;
-  //     } else {
-  //       print('Document does not exist on the database');
-  //     }
-  //   });
-  // }
+  //Update User
+  Future updateUser(fullNameUpdated,nicUpdated,passportNoUpdated,phoneNoUpdated) async {
+    try{
+      FirebaseFirestore.instance.collection('userData').doc(_auth.currentUser?.uid).update(
+          {'fullName':fullNameUpdated,
+            'nic': nicUpdated,
+            'phoneNo': phoneNoUpdated,
+            'passportNo': passportNoUpdated
+          });
+      return 'Success';
+    }catch (e){
+      return e.toString();
+    }
+  }
 
+  Future resetPassword(newPassword) async{
+    try{
+      await _auth.currentUser?.updatePassword(newPassword);
+      return 'Success';
+    }catch(e){
+      return e.toString();
+    }
+  }
 
+  //Delete user from the firebase and data from the firestore
+  Future deleteUserData() async {
+    try{
+      FirebaseFirestore.instance.collection('userData').doc(_auth.currentUser?.uid).delete();
+      _auth.currentUser?.delete();
+
+      return 'Success';
+    }catch(e){
+      return e.toString();
+    }
+
+  }
+
+  //Delete user from the firebase
+  Future deleteUser(userId) async {
+    try{
+      _auth.currentUser?.delete();
+      try{
+        FirebaseFirestore.instance.collection('userData').doc(userId).delete();
+
+        return 'Success';
+      }catch(e){
+        return e.toString();
+      }
+      return 'Success';
+    }catch(e){
+      return e.toString();
+    }
+
+  }
 
   getUserById(userId)async{
 

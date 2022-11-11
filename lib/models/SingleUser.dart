@@ -5,6 +5,7 @@ class SingleUser {
   final String passportNo;
   final String fullName;
   final String email;
+  final String userType;
 
   SingleUser({
     required this.uid,
@@ -12,7 +13,8 @@ class SingleUser {
     required this.nic,
     required this.passportNo,
     required this.fullName,
-    required this.email
+    required this.email,
+    required this.userType
   });
 
   Map<String, dynamic> toJson() =>
@@ -22,7 +24,8 @@ class SingleUser {
         'nic': nic,
         'passportNo' : passportNo,
         'fullName': fullName,
-        'email': email
+        'email': email,
+        'userType':userType
       };
 
   static SingleUser fromJson(Map<String, dynamic> json) =>
@@ -33,6 +36,7 @@ class SingleUser {
         passportNo: json['passportNo'],
         fullName: json['fullName'],
         email: json['email'],
+        userType: json['userType']
       );
 
   SingleUser.fromSnapshot(snapshot):
@@ -41,5 +45,6 @@ class SingleUser {
         nic = snapshot.data()['nic'],
         passportNo = snapshot.data()['passportNo'],
         fullName = snapshot.data()['fullName'],
-        email = snapshot.data()['email'];
+        email = snapshot.data()['email'],
+        userType = snapshot.data()['userType'];
 }

@@ -2,32 +2,33 @@ import 'package:bus_ticketing_system/screens/authenticate/register.dart';
 import 'package:bus_ticketing_system/screens/authenticate/sign_in.dart';
 import 'package:bus_ticketing_system/services/validators.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/auth.dart';
 import '../home/home.dart';
 
 class EmailSignin extends StatefulWidget {
-  const EmailSignin({Key? key}) : super(key: key);
+   EmailSignin({Key? key}) : super(key: key);
 
   @override
   State<EmailSignin> createState() => _EmailSigninState();
+
 }
 
 class _EmailSigninState extends State<EmailSignin> {
+
+  bool isLoading = false;
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => isLoading
+      ? const LoadingPage()
+      : const Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.blueAccent,
-          elevation: 0.0,
-          title: const Text('Sign In'),
-        ),
-        body: const UserSignInWidget()
+        body: UserSignInWidget()
     );
   }
-}
+
 
 class UserSignInWidget extends StatefulWidget {
   const UserSignInWidget({Key? key}) : super(key: key);
@@ -35,6 +36,22 @@ class UserSignInWidget extends StatefulWidget {
   @override
   State<UserSignInWidget> createState() {
     return UserSignInFromState();
+  }
+}
+
+class LoadingPage extends StatelessWidget {
+  const LoadingPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // backgroundColor: ,
+      body: Center(
+        child: CircularProgressIndicator(
+          color: Colors.blueAccent,
+        ),
+      ),
+    );
   }
 }
 
@@ -47,8 +64,8 @@ class _UserSignInWidgetState extends State<UserSignInWidget> {
 
 class UserSignInFromState extends State<UserSignInWidget>{
 
-  final AuthService _auth = AuthService();
 
+  final AuthService _auth = AuthService();
   final _signInFormKey = GlobalKey<FormState>();
 
   final TextEditingController _email = TextEditingController();
@@ -70,7 +87,7 @@ class UserSignInFromState extends State<UserSignInWidget>{
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Padding(padding: EdgeInsets.fromLTRB(0.0,10.0,0.0,30.0),
+                  const Padding(padding: EdgeInsets.fromLTRB(0.0,50.0,0.0,30.0),
                     child: Center(child: Text('Bus Ticketing System',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -80,7 +97,7 @@ class UserSignInFromState extends State<UserSignInWidget>{
                     ),
                     ),
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(0.0,0.0,0.0,30.0),
+                  const Padding(padding: EdgeInsets.fromLTRB(0.0,0.0,0.0,30.0),
                     child: Center(child: Text('Login',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -90,7 +107,7 @@ class UserSignInFromState extends State<UserSignInWidget>{
                     ),
                     ),
                   ),
-                  Center(
+                  const Center(
                     child: Image(
                       image: AssetImage('assets/bus.webp'),
                     ),
@@ -133,29 +150,34 @@ class UserSignInFromState extends State<UserSignInWidget>{
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Padding(padding: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),
+                      Padding(padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),
                         child: ElevatedButton(
                           onPressed: () async {
+                             _EmailSigninState().isLoading = true;
                             // Validate returns true if the form is valid, or false otherwise.
                             if (_signInFormKey.currentState!.validate()) {
                               // ScaffoldMessenger.of(context).showSnackBar(
                               //   const SnackBar(content: Text('Processing Data')),
                               // );
                               dynamic result = await _auth.signInEmail(_email.text, _pass.text);
-                              print(result);
+                              if (kDebugMode) {
+                                print(result);
+                              }
                               if(result=='Success'){
+                                _EmailSigninState().isLoading = false;
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(content: Text('Successfully Signed In'),
                                     ));
                                 Navigator.push(context, MaterialPageRoute(builder: (_)=> const Home()));
                               }else{
+                                 _EmailSigninState().isLoading = false;
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     new SnackBar(content: new Text(result),
                                     ));
                               }
                             }
                           },
-                          child: Text('Sign In',
+                          child: const Text('Sign In',
                             style: TextStyle(fontSize: 25,wordSpacing: 2,),
                           ),
                         ),
@@ -196,3 +218,6 @@ class UserSignInFromState extends State<UserSignInWidget>{
   }
 
 }
+
+
+

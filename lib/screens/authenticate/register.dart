@@ -1,6 +1,8 @@
 import 'package:bus_ticketing_system/services/validators.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../services/auth.dart';
+import '../home/home.dart';
 
 void main() {
   runApp(const Register());
@@ -39,7 +41,7 @@ class Register extends StatelessWidget {
                 Tab(icon: Text('Foreign')),
               ],
             ),
-            title: const Text('Register'),
+            title: Center(child: const Text('Register'),),
           ),
           body:  TabBarView(
             children: <Widget>[
@@ -179,23 +181,23 @@ class Register extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-                                Padding(padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
+                                Padding(padding: const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
                                   child: ElevatedButton(
                                     onPressed: () async {
                                       // Validate returns true if the form is valid, or false otherwise.
                                       if (registrationFormKeyLocal.currentState!.validate()) {
-                                        // ScaffoldMessenger.of(context).showSnackBar(
-                                        //   const SnackBar(content: Text('Processing Data')),
-                                        //
-                                        // );
                                         dynamic result = await auth.registerLocal(fullName.text,nic.text,contactNo.text,email.text, pass.text);
-                                        print(result);
+                                        if (kDebugMode) {
+                                          print(result);
+                                        }
                                         if(result=='Success'){
-                                          print('Successfully Created Account');
+                                          if (kDebugMode) {
+                                            print('Successfully Created Account');
+                                          }
                                           ScaffoldMessenger.of(context).showSnackBar(
                                               const SnackBar(content: Text('Successfully Created Account'),
                                               ));
-                                          // Navigator.push(context, MaterialPageRoute(builder: (_)=> const EmailSignin()));
+                                          Navigator.push(context, MaterialPageRoute(builder: (_)=> const Home()));
                                         }else{
                                           ScaffoldMessenger.of(context).showSnackBar(
                                               SnackBar(content: new Text(result),
@@ -340,15 +342,12 @@ class Register extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-                                Padding(padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
+                                Padding(padding: const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
                                   child: ElevatedButton(
                                     onPressed: () async {
                                       // Validate returns true if the form is valid, or false otherwise.
                                       if (registrationFormKeyForeign.currentState!.validate()) {
-                                        // ScaffoldMessenger.of(context).showSnackBar(
-                                        //   const SnackBar(content: Text('Processing Data')),
-                                        //
-                                        // );
+
                                         dynamic result = await auth.registerForeign(fullName.text,passportNo.text,contactNo.text,email.text, pass.text);
                                         print(result);
                                         if(result=='Success'){
@@ -356,10 +355,10 @@ class Register extends StatelessWidget {
                                           ScaffoldMessenger.of(context).showSnackBar(
                                               const SnackBar(content: Text('Successfully Created Account'),
                                               ));
-                                          // Navigator.push(context, MaterialPageRoute(builder: (_)=> const EmailSignin()));
+                                          Navigator.push(context, MaterialPageRoute(builder: (_)=> const Home()));
                                         }else{
                                           ScaffoldMessenger.of(context).showSnackBar(
-                                              SnackBar(content: new Text(result),
+                                              new SnackBar(content: new Text(result),
                                               ));
                                         }
                                       }

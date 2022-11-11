@@ -1,12 +1,15 @@
 import 'package:bus_ticketing_system/models/SingleUser.dart';
+import 'package:bus_ticketing_system/screens/home/home.dart';
 import 'package:bus_ticketing_system/services/validators.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/auth.dart';
 
 class UpdateProfile extends StatefulWidget {
+
   SingleUser user;
-  UpdateProfile(SingleUser this.user, {Key? key}) : super(key: key);
+  UpdateProfile(this.user, {Key? key}) : super(key: key);
 
   @override
   State<UpdateProfile> createState() => _UpdateProfileState();
@@ -15,7 +18,7 @@ class UpdateProfile extends StatefulWidget {
 class _UpdateProfileState extends State<UpdateProfile> {
 
 
-  final AuthService auth = AuthService();
+  final AuthService _auth = AuthService();
 
   final updateUserForm = GlobalKey<FormState>();
 
@@ -39,7 +42,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
         appBar: AppBar(
         backgroundColor: Colors.blueAccent,
         elevation: 0.0,
-        title:  Text('Update Profile'),
+        title:  const Text('Update Profile'),
     ),
     body:  Form(
         key: updateUserForm,
@@ -81,20 +84,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                       return null;
                     },
                   ),
-                  TextFormField(
-                    controller: nic,
-                    decoration: const InputDecoration(
-                      hintText: 'What is your NIC Number?',
-                      labelText: 'NIC *',
-
-                    ),
-                    validator: (value){
-                      if(value==null || value.isEmpty){
-                        return 'Enter Your NIC';
-                      }
-                      return null;
-                    },
-                  ),
+                  buildNicPassportUpdate(widget.user),
                   TextFormField(
                     controller: contactNo,
                     decoration: const InputDecoration(
@@ -118,21 +108,20 @@ class _UpdateProfileState extends State<UpdateProfile> {
                       Padding(padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
                         child: ElevatedButton(
                           onPressed: () async {
-                            // Validate returns true if the form is valid, or false otherwise.
-                            // if (registrationFormKeyLocal.currentState!.validate()) {
-                            //   dynamic result = await auth.registerLocal(fullName.text,nic.text,contactNo.text,email.text, pass.text);
-                            //   print(result);
-                            //   if(result=='Success'){
-                            //     print('Successfully Created Account');
-                            //     ScaffoldMessenger.of(context).showSnackBar(
-                            //         const SnackBar(content: Text('Successfully Created Account'),
-                            //         ));
-                            //   }else{
-                            //     ScaffoldMessenger.of(context).showSnackBar(
-                            //         SnackBar(content: new Text(result),
-                            //         ));
-                            //   }
-                            // }
+                            dynamic result = await _auth.updateUser(fullName.text, nic.text,passportNo.text, contactNo.text);
+                            if(result=='Success'){
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Successfully Updated Data'),
+                                  ));
+                              Navigator.push(context, MaterialPageRoute(builder: (_)=> const Home()));
+                            }else{
+                              if (kDebugMode) {
+                                print(result);
+                              }
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: new Text(result),
+                                  ));
+                            }
                           },
                           child: const Text('Update User Profile',
                             style: TextStyle(fontSize: 18),),
@@ -148,4 +137,37 @@ class _UpdateProfileState extends State<UpdateProfile> {
     ),
     );
   }
+
+  Widget buildNicPassportUpdate(SingleUser user) {
+    if(user.userType=='local'){
+      return TextFormField(
+        controller: nic,
+        decoration: const InputDecoration(
+          hintText: 'What is your NIC Number?',
+          labelText: 'NIC *',
+           ),
+        validator: (value){
+          if(value==null || value.isEmpty){
+            return 'Enter Your NIC';
+          }
+          return null;
+          },);
+    }else{
+      return TextFormField(
+        controller: passportNo,
+        decoration: const InputDecoration(
+          hintText: 'What is your Passport Number?',
+          labelText: 'Passport Number *',
+        ),
+        validator: (value){
+          if(value==null || value.isEmpty){
+            return 'Enter Your Passport Number';
+          }
+          return null;
+        },
+      );
+    }
+  }
 }
+
+
