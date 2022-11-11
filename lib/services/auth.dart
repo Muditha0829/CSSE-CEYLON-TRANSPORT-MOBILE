@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:bus_ticketing_system/models/SingleUser.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/user.dart';
@@ -6,6 +9,7 @@ class AuthService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  late final SingleUser singleUser;
 
 
 
@@ -128,17 +132,40 @@ class AuthService {
   }
 
   //Get collection data from the firebase
-  Future getUserData() async {
-    final user = _auth.currentUser;
-    _fireStore.collection('userData').doc(user?.uid) .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        print('Document data: ${documentSnapshot.data()}');
-      } else {
-        print('Document does not exist on the database');
-      }
-    });
+  // Future getUserData() async {
+  //   final user = _auth.currentUser;
+  //   _fireStore.collection('userData').doc(user?.uid) .get()
+  //       .then((DocumentSnapshot documentSnapshot) {
+  //     if (documentSnapshot.exists) {
+  //       Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+  //       // print('Document data: ${documentSnapshot.data()}');
+  //       // print('Full Name: ${data['fullName']}');
+  //       // print(data['fullName']);
+  //       return data;
+  //     } else {
+  //       print('Document does not exist on the database');
+  //     }
+  //   });
+  // }
+
+
+
+  getUserById(userId)async{
+
+    late DocumentReference<Map<String, dynamic>> oneUser;
+    late SingleUser singleUser;
+
+    oneUser = FirebaseFirestore.instance.collection('userData').doc(userId);
+
+    final DocumentSnapshot<Map<String, dynamic>> snapshot;
+    snapshot = await oneUser.get();
+    singleUser = SingleUser.fromJson(snapshot.data()!);
+    // print(singleUser.uid);
+    return singleUser;
   }
+
+
+
 
   //Sign out
   Future signOut() async {
@@ -163,6 +190,15 @@ class AuthService {
         print('User is signed in!');
       }
     });
+  }
+
+  Future<String?> getCurrentUserId() async {
+    final user = await _auth.currentUser;
+    if(user != null){
+      return user?.uid;
+    }else{
+      return 'No User';
+    }
   }
 
   Future<bool> signIncheck() async {

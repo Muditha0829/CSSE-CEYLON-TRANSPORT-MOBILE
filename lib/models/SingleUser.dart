@@ -30,4 +30,11 @@ class SingleUser {
         fullName: json['fullName'],
         email: json['email'],
       );
+
+  SingleUser.fromSnapshot(snapshot):
+        uid = snapshot.data()['uid'],
+        phoneNo = snapshot.data()['phoneNo'],
+        nic = snapshot.data()['nic'],
+        fullName = snapshot.data()['fullName'],
+        email = snapshot.data()['email'];
 }

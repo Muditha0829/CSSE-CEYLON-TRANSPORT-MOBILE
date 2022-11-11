@@ -22,6 +22,20 @@ class _HomeState extends State<Home> {
 
   final FirebaseAuth auth = FirebaseAuth.instance;
 
+  late final String UserId;
+
+  @override
+  void initState() {
+    _auth.getCurrentUserId().then((String? result) {
+      setState(() {
+        UserId = result!;
+      });
+    }
+    );
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,8 +70,9 @@ class _HomeState extends State<Home> {
              ListTile(
               title:  const Text('Profile'),
               onTap: (){
+                moveToProfile();
                 Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (_)=> const Profile()));
+                Navigator.push(context, MaterialPageRoute(builder: (_)=>  Profile(UserId)));
               },
             ),
              ListTile(
@@ -116,5 +131,19 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  void moveToProfile(){
+  final userId =  auth.currentUser?.uid;
+  if(userId!=null){
+    changeScreen(userId);
+  }
+  }
+
+  void changeScreen(userId) {
+
+    Navigator.of(context).push(MaterialPageRoute(builder: (_){
+      return Profile(userId);
+    }));
   }
 }
