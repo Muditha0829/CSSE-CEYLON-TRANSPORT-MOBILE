@@ -2,6 +2,7 @@ class SingleUser {
   String uid = '';
   final String phoneNo;
   final String nic;
+  final String passportNo;
   final String fullName;
   final String email;
 
@@ -9,6 +10,7 @@ class SingleUser {
     required this.uid,
     required this.phoneNo,
     required this.nic,
+    required this.passportNo,
     required this.fullName,
     required this.email
   });
@@ -18,6 +20,7 @@ class SingleUser {
         'uid': uid,
         'phoneNo': phoneNo,
         'nic': nic,
+        'passportNo' : passportNo,
         'fullName': fullName,
         'email': email
       };
@@ -27,6 +30,7 @@ class SingleUser {
         uid: json['uid'],
         phoneNo: json['phoneNo'],
         nic: json['nic'],
+        passportNo: json['passportNo'],
         fullName: json['fullName'],
         email: json['email'],
       );
@@ -35,6 +39,7 @@ class SingleUser {
         uid = snapshot.data()['uid'],
         phoneNo = snapshot.data()['phoneNo'],
         nic = snapshot.data()['nic'],
+        passportNo = snapshot.data()['passportNo'],
         fullName = snapshot.data()['fullName'],
         email = snapshot.data()['email'];
 }

@@ -1,5 +1,6 @@
 import 'package:bus_ticketing_system/screens/authenticate/register.dart';
 import 'package:bus_ticketing_system/screens/authenticate/sign_in.dart';
+import 'package:bus_ticketing_system/services/validators.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
