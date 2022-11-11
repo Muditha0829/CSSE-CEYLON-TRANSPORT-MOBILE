@@ -63,8 +63,16 @@ class _HomeState extends State<Home> {
              ListTile(
               title:  const Text('QR Code'),
                onTap: (){
-                 // Navigator.pop(context);
+                 final user = auth.currentUser;
+                 String? userId = user?.uid;
+                 Navigator.push(context, MaterialPageRoute(builder: (_)=> GenerateQr(userId!)));
                },
+            ),
+            ListTile(
+              title:  const Text('Scan QR Code'),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (_)=> const ScanQr()));
+              },
             ),
              ListTile(
               title:  const Text('Notifications'),
