@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/auth.dart';
+import '../authenticate/email_sign_in.dart';
 
 class UpdatePassword extends StatefulWidget {
   const UpdatePassword({Key? key}) : super(key: key);
@@ -13,18 +14,18 @@ class UpdatePassword extends StatefulWidget {
 
 class _UpdatePasswordState extends State<UpdatePassword> {
 
-  final AuthService _auth = AuthService();
   final FirebaseAuth auth = FirebaseAuth.instance;
 
+  bool isLoading = false;
+  final updatePasswordFormKey = GlobalKey<FormState>();
+
+  final TextEditingController pass = TextEditingController();
+  final TextEditingController confirmPass = TextEditingController();
+
   @override
-  Widget build(BuildContext context) {
-
-    final updatePasswordFormKey = GlobalKey<FormState>();
-
-    final TextEditingController pass = TextEditingController();
-    final TextEditingController confirmPass = TextEditingController();
-
-    return Scaffold(
+  Widget build(BuildContext context) => isLoading ?
+      const LoadingPage()
+      : Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
         backgroundColor: Colors.blueAccent,
@@ -95,6 +96,9 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                       Padding(padding: const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
                         child: ElevatedButton(
                           onPressed: () async {
+                            setState(() {
+                              isLoading = true;
+                            });
                             if (updatePasswordFormKey.currentState!.validate()) {
 
                               try{
@@ -102,20 +106,19 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(content: Text('Password Changed Successfully'),
                                     ));
+                                setState(() {
+                                  isLoading = false;
+                                });
                                 Navigator.push(context, MaterialPageRoute(builder: (_)=> const Home()));
                               }catch(e){
-                                // print(e);
+                                setState(() {
+                                  isLoading = false;
+                                });
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text(e.toString()),
                                     ));
                               }
 
-                              // dynamic result = _auth.resetPassword(confirmPass.text);
-                              // print(result);
-                              // print(result.toString());
-                              // if(result=='Success'){
-                              //
-                              // }
                             }
                           },
                           child: const Text('Update Password',style: TextStyle(fontSize: 18),),
@@ -130,5 +133,5 @@ class _UpdatePasswordState extends State<UpdatePassword> {
         )
     ),
     );
-  }
+
 }

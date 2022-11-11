@@ -1,7 +1,6 @@
 import 'package:bus_ticketing_system/models/SingleUser.dart';
 import 'package:bus_ticketing_system/screens/home/home.dart';
 import 'package:bus_ticketing_system/services/validators.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/auth.dart';
@@ -105,7 +104,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Padding(padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
+                      Padding(padding: const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
                         child: ElevatedButton(
                           onPressed: () async {
                             dynamic result = await _auth.updateUser(fullName.text, nic.text,passportNo.text, contactNo.text);
@@ -115,9 +114,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                   ));
                               Navigator.push(context, MaterialPageRoute(builder: (_)=> const Home()));
                             }else{
-                              if (kDebugMode) {
-                                print(result);
-                              }
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: new Text(result),
                                   ));
