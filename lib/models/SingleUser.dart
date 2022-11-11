@@ -4,13 +4,15 @@ class SingleUser {
   final String nic;
   final String fullName;
   final String email;
+  final String amount;
 
   SingleUser({
     required this.uid,
     required this.phoneNo,
     required this.nic,
     required this.fullName,
-    required this.email
+    required this.email,
+    required this.amount
   });
 
   Map<String, dynamic> toJson() =>
@@ -19,7 +21,8 @@ class SingleUser {
         'phoneNo': phoneNo,
         'nic': nic,
         'fullName': fullName,
-        'email': email
+        'email': email,
+        'amount': amount,
       };
 
   static SingleUser fromJson(Map<String, dynamic> json) =>
@@ -29,5 +32,6 @@ class SingleUser {
         nic: json['nic'],
         fullName: json['fullName'],
         email: json['email'],
+        amount: json['amount'],
       );
 }

@@ -1,6 +1,7 @@
 import 'package:bus_ticketing_system/screens/home/profile.dart';
 import 'package:bus_ticketing_system/screens/transaction/GenerateQr.dart';
 import 'package:bus_ticketing_system/screens/transaction/ScanQr.dart';
+import 'package:bus_ticketing_system/screens/transaction/TransactionList.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -58,6 +59,13 @@ class _HomeState extends State<Home> {
               onTap: (){
                 Navigator.pop(context);
                 Navigator.push(context, MaterialPageRoute(builder: (_)=> const Profile()));
+              },
+            ),
+            ListTile(
+              title:  const Text('Transaction List'),
+              onTap: (){
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (_)=> const TransactionList()));
               },
             ),
              ListTile(

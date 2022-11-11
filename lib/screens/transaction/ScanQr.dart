@@ -46,15 +46,32 @@ class _ScanQrState extends State<ScanQr> {
     }
   }
 
+  @override
+  void dispose(){
+    qrController?.dispose();
+    qrController?.pauseCamera();
+    qrController?.stopCamera();
+    super.dispose();
+  }
+
+  @override
+  void reassemble() async{
+    super.reassemble();
+
+    if(Platform.isAndroid){
+      await qrController!.resumeCamera();
+    }
+  }
+
   void changeScreen(singleUser) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_){
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_){
       return TransactionProfile(singleUser);
     }));
   }
 
   void qrScan(QRViewController controller){
-    qrController = controller;
-    qrController?.scannedDataStream.listen((event) {
+    // qrController = controller;
+    controller.scannedDataStream.listen((event) {
       setState(() {
         result = event;
       });
@@ -62,20 +79,7 @@ class _ScanQrState extends State<ScanQr> {
     });
   }
 
-  @override
-  void dispose(){
-    qrController?.dispose();
-    super.dispose();
-  }
 
-  @override
-  void  reassemble() async{
-    super.reassemble();
-
-    if(Platform.isAndroid){
-      await qrController!.resumeCamera();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

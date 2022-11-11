@@ -1,6 +1,7 @@
 import 'package:bus_ticketing_system/models/SingleUser.dart';
 import 'package:bus_ticketing_system/models/TransactionModel.dart';
 import 'package:bus_ticketing_system/screens/home/home.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -19,6 +20,10 @@ class _TransactionProfileState extends State<TransactionProfile> {
   final amountController = TextEditingController();
   final startController = TextEditingController();
   final stopController = TextEditingController();
+
+  late SingleUser singleUser;
+
+  late DocumentReference<Map<String, dynamic>> userData;
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +102,6 @@ class _TransactionProfileState extends State<TransactionProfile> {
           Center(
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
                 createTransaction(
                     start: startController.text,
                     stop: stopController.text,
@@ -112,19 +116,63 @@ class _TransactionProfileState extends State<TransactionProfile> {
     );
   }
 
-  Future<dynamic> createTransaction({required String start, required String stop, required int amount}) async{
-    final transaction = FirebaseFirestore.instance.collection('transaction').doc();
+  goToPage(){
+    Navigator.of(context).push(MaterialPageRoute(builder: (_){
+      return const Home();
+    }));
+  }
 
-    final transactionProfile = TransactionModel(
+  showMessage(message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+    ));
+  }
+
+  Future<dynamic> createTransaction({required String start, required String stop, required int amount}) async{
+
+    userData = FirebaseFirestore.instance.collection('userData').doc(widget.singleUser.uid);
+
+    final DocumentSnapshot<Map<String, dynamic>> snapshot;
+
+    try{
+      snapshot  = await userData.get();
+
+      if(snapshot.exists){
+        singleUser = SingleUser.fromJson(snapshot.data()!);
+      }else{
+        if (kDebugMode) {
+          print("No data found");
+        }
+      }
+    }catch(err){
+      if (kDebugMode) {
+        print(err.toString());
+      }
+    }
+
+    if(int.parse(singleUser.amount) < int.parse(amountController.text)){
+      showMessage('Your Balance is Insufficient To Proceed.');
+    }else{
+
+      await FirebaseFirestore.instance.collection('userData').doc(widget.singleUser.uid).update({
+        "amount": int.parse(singleUser.amount) - int.parse(amountController.text)
+      });
+      
+      final transaction = FirebaseFirestore.instance.collection('transaction').doc();
+
+      final transactionProfile = TransactionModel(
         id: transaction.id,
         start: start,
         stop: stop,
         amount: amount,
         passengerId: widget.singleUser.uid,
-    );
+      );
 
-    final json = transactionProfile.toJson();
+      final json = transactionProfile.toJson();
 
-    await transaction.set(json);
+      await transaction.set(json);
+
+      goToPage();
+    }
   }
 }
