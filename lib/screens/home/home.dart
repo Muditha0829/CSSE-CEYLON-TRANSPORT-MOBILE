@@ -1,13 +1,18 @@
+
 import 'package:bus_ticketing_system/screens/credit/AddPayment.dart';
 import 'package:bus_ticketing_system/screens/credit/PaymentList.dart';
+
+import 'package:bus_ticketing_system/screens/authenticate/email_sign_in.dart';
+
 import 'package:bus_ticketing_system/screens/home/profile.dart';
 import 'package:bus_ticketing_system/screens/transaction/GenerateQr.dart';
 import 'package:bus_ticketing_system/screens/transaction/ScanQr.dart';
+import 'package:bus_ticketing_system/screens/transaction/TransactionList.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/auth.dart';
-import '../authenticate/email_sign_in.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -24,6 +29,29 @@ class _HomeState extends State<Home> {
 
   final FirebaseAuth auth = FirebaseAuth.instance;
 
+  late final String UserId;
+  late dynamic result = 'Email';
+
+
+  @override
+  void initState() {
+    result = FirebaseAuth.instance.currentUser?.email;
+    _auth.getCurrentUserId().then((String? result) {
+      setState(() {
+        UserId = result!;
+      });
+    });
+
+
+    super.initState();
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    result = FirebaseAuth.instance.currentUser?.email;
+    super.setState(fn);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,10 +59,13 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           backgroundColor: Colors.blueAccent,
           elevation: 0.0,
-          title: const Text('Home'),
+          title: const Text('Home',),
         ),
         body:  Center(
-          child: Text("Home"),
+          child: ElevatedButton(child: Text('Test'),
+          onPressed: (){
+
+          },),
         ),
       drawer: Drawer(
         child: ListView(
@@ -47,19 +78,26 @@ class _HomeState extends State<Home> {
         child: Center(child: Wrap(
           children: <Widget>[
             Column(
-              children:  const [
-                Text('Full Name',style: TextStyle(color: Colors.white)),
-                Text('Email',style: TextStyle(color: Colors.white))
+              children:   [
+                Text((result.toString()),style: TextStyle(color: Colors.white,fontSize: 19))
               ],
             )
           ],
         ))
       ),
              ListTile(
-              title:  const Text('Profile'),
+              title:  const Text('Profile',style: TextStyle(fontSize: 18)),
+              onTap: (){
+                moveToProfile();
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (_)=>  Profile(UserId)));
+              },
+            ),
+            ListTile(
+              title:  const Text('Transaction List',style: TextStyle(fontSize: 18)),
               onTap: (){
                 Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (_)=> const Profile()));
+                Navigator.push(context, MaterialPageRoute(builder: (_)=> const TransactionList()));
               },
             ),
             ListTile(
@@ -77,43 +115,52 @@ class _HomeState extends State<Home> {
               },
             ),
              ListTile(
-              title:  const Text('QR Code'),
+              title:  const Text('QR Code',style: TextStyle(fontSize: 18)),
+               onTap: (){
+                 final user = auth.currentUser;
+                 String? userId = user?.uid;
+                 Navigator.push(context, MaterialPageRoute(builder: (_)=> GenerateQr(userId!)));
+               },
+            ),
+            ListTile(
+              title:  const Text('Scan QR Code',style: TextStyle(fontSize: 18)),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (_)=> const ScanQr()));
+              },
+            ),
+             ListTile(
+              title:  const Text('Notifications',style: TextStyle(fontSize: 18)),
                onTap: (){
                  // Navigator.pop(context);
                },
             ),
              ListTile(
-              title:  const Text('Notifications'),
+              title:  const Text('Account Balance',style: TextStyle(fontSize: 18)),
                onTap: (){
                  // Navigator.pop(context);
                },
             ),
              ListTile(
-              title:  const Text('Account Balance'),
+              title:  const Text('Payment Methods',style: TextStyle(fontSize: 18)),
                onTap: (){
                  // Navigator.pop(context);
                },
             ),
              ListTile(
-              title:  Text('Payment Methods'),
+              title:  const Text('Account Summary',style: TextStyle(fontSize: 18)),
                onTap: (){
                  // Navigator.pop(context);
                },
             ),
              ListTile(
-              title:  const Text('Account Summary'),
-               onTap: (){
-                 // Navigator.pop(context);
+              title:  const Text('Exit',style: TextStyle(fontSize: 18)),
+               onTap: ()async{
+                 Navigator.pop(context);
+
                },
             ),
              ListTile(
-              title:  const Text('Exit'),
-               onTap: (){
-                 // Navigator.pop(context);
-               },
-            ),
-             ListTile(
-              title:  const Text('Logout'),
+              title:  const Text('Logout',style: TextStyle(fontSize: 18,color: Colors.red)),
                onTap: () async {
                  dynamic result = await _auth.signOut();
                  print(result);
@@ -122,7 +169,7 @@ class _HomeState extends State<Home> {
                    ScaffoldMessenger.of(context).showSnackBar(
                        const SnackBar(content: Text('Successfully Signed Out'),
                        ));
-                   Navigator.push(context, MaterialPageRoute(builder: (_)=> const EmailSignin()));
+                   Navigator.push(context, MaterialPageRoute(builder: (_)=> EmailSignin()));
                  }
 
                },
@@ -132,5 +179,19 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  void moveToProfile(){
+  final userId =  auth.currentUser?.uid;
+  if(userId!=null){
+    changeScreen(userId);
+  }
+  }
+
+  void changeScreen(userId) {
+
+    Navigator.of(context).push(MaterialPageRoute(builder: (_){
+      return Profile(userId);
+    }));
   }
 }

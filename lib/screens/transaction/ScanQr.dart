@@ -46,35 +46,37 @@ class _ScanQrState extends State<ScanQr> {
     }
   }
 
-  void changeScreen(singleUser) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_){
-      return TransactionProfile(singleUser);
-    }));
-  }
-
-  void qrScan(QRViewController controller){
-    qrController = controller;
-    qrController?.scannedDataStream.listen((event) {
-      setState(() {
-        result = event;
-      });
-      getUserById(event.code);
-    });
-  }
-
   @override
   void dispose(){
     qrController?.dispose();
+    qrController?.pauseCamera();
+    qrController?.stopCamera();
     super.dispose();
   }
 
   @override
-  void  reassemble() async{
+  void reassemble() async{
     super.reassemble();
 
     if(Platform.isAndroid){
       await qrController!.resumeCamera();
     }
+  }
+
+  void changeScreen(singleUser) {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_){
+      return TransactionProfile(singleUser);
+    }));
+  }
+
+  void qrScan(QRViewController controller){
+    // qrController = controller;
+    controller.scannedDataStream.listen((event) {
+      setState(() {
+        result = event;
+      });
+      getUserById(event.code);
+    });
   }
 
   @override
@@ -87,20 +89,13 @@ class _ScanQrState extends State<ScanQr> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(onPressed: (){getUserById('KMGlh8RrzwexEAISii2eWeEWuHj1');}, child: const Text('getData')),
+            //ElevatedButton(onPressed: (){getUserById('KMGlh8RrzwexEAISii2eWeEWuHj1');}, child: const Text('getData')),
             SizedBox(
               height: 400,
               width: 400,
               child: QRView(
                 key: _globalKey,
                 onQRViewCreated: qrScan,
-                // overlay: QrScannerOverlayShape(
-                //   borderColor: Theme.of(context).colorScheme.secondary,
-                //   borderRadius: 10,
-                //   borderLength: 20,
-                //   borderWidth: 10,
-                //   cutOutSize: MediaQuery.of(context).size.width * 0.75,
-                // ),
               ),
             ),
             const SizedBox(height: 15),
