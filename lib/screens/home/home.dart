@@ -1,3 +1,5 @@
+import 'package:bus_ticketing_system/screens/credit/AddPayment.dart';
+import 'package:bus_ticketing_system/screens/credit/PaymentList.dart';
 import 'package:bus_ticketing_system/screens/home/profile.dart';
 import 'package:bus_ticketing_system/screens/transaction/GenerateQr.dart';
 import 'package:bus_ticketing_system/screens/transaction/ScanQr.dart';
@@ -58,6 +60,20 @@ class _HomeState extends State<Home> {
               onTap: (){
                 Navigator.pop(context);
                 Navigator.push(context, MaterialPageRoute(builder: (_)=> const Profile()));
+              },
+            ),
+            ListTile(
+              title:  const Text('Add Payment'),
+              onTap: (){
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (_)=> const AddPayment()));
+              },
+            ),
+            ListTile(
+              title:  const Text('Payment List'),
+              onTap: (){
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (_)=> const PaymentList()));
               },
             ),
              ListTile(
