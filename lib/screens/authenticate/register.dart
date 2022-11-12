@@ -11,11 +11,10 @@ void main() {
 class Register extends StatelessWidget {
   const Register({super.key});
 
-
-
-
   @override
   Widget build(BuildContext context) {
+
+
 
     final AuthService auth = AuthService();
 
@@ -63,15 +62,6 @@ class Register extends StatelessWidget {
                           ),
                         ),
                         ),),
-                      // const Padding(
-                      //   padding: EdgeInsets.fromLTRB(20.0,10.0,20.0,30.0),
-                      //   child: Center(child: Text('Fill the following fields to sign up',
-                      //     style: TextStyle(
-                      //       fontSize: 20.0,
-                      //       color: Colors.black54,
-                      //     ),
-                      //   ),
-                      //   ),),
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: Column(

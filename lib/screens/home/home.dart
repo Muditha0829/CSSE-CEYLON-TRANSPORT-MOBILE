@@ -31,10 +31,6 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     result = FirebaseAuth.instance.currentUser?.email;
-    if (kDebugMode) {
-      print(result);
-    }
-
     _auth.getCurrentUserId().then((String? result) {
       setState(() {
         UserId = result!;
@@ -48,9 +44,6 @@ class _HomeState extends State<Home> {
   @override
   void setState(VoidCallback fn) {
     result = FirebaseAuth.instance.currentUser?.email;
-    if (kDebugMode) {
-      print(result);
-    }
     super.setState(fn);
   }
 
