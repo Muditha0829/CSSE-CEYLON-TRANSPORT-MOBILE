@@ -79,8 +79,6 @@ class _ScanQrState extends State<ScanQr> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,20 +89,13 @@ class _ScanQrState extends State<ScanQr> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(onPressed: (){getUserById('KMGlh8RrzwexEAISii2eWeEWuHj1');}, child: const Text('getData')),
+            //ElevatedButton(onPressed: (){getUserById('KMGlh8RrzwexEAISii2eWeEWuHj1');}, child: const Text('getData')),
             SizedBox(
               height: 400,
               width: 400,
               child: QRView(
                 key: _globalKey,
                 onQRViewCreated: qrScan,
-                // overlay: QrScannerOverlayShape(
-                //   borderColor: Theme.of(context).colorScheme.secondary,
-                //   borderRadius: 10,
-                //   borderLength: 20,
-                //   borderWidth: 10,
-                //   cutOutSize: MediaQuery.of(context).size.width * 0.75,
-                // ),
               ),
             ),
             const SizedBox(height: 15),

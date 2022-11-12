@@ -81,7 +81,7 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             Column(
               children:   [
-                Text((result.toString()),style: TextStyle(color: Colors.white,fontSize: 22))
+                Text((result.toString()),style: TextStyle(color: Colors.white,fontSize: 19))
               ],
             )
           ],
@@ -96,7 +96,7 @@ class _HomeState extends State<Home> {
               },
             ),
             ListTile(
-              title:  const Text('Transaction List'),
+              title:  const Text('Transaction List',style: TextStyle(fontSize: 18)),
               onTap: (){
                 Navigator.pop(context);
                 Navigator.push(context, MaterialPageRoute(builder: (_)=> const TransactionList()));
@@ -111,7 +111,7 @@ class _HomeState extends State<Home> {
                },
             ),
             ListTile(
-              title:  const Text('Scan QR Code'),
+              title:  const Text('Scan QR Code',style: TextStyle(fontSize: 18)),
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (_)=> const ScanQr()));
               },

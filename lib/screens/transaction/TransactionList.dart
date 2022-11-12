@@ -73,16 +73,18 @@ class _UserListState extends State<TransactionList> {
           selected: true,
           title: Column(
             children: [
+              const SizedBox(height: 9),
               Row(
                 children: [
-                  const SizedBox(height: 7),
+                  const Icon(Icons.directions_bus_filled_sharp, color: Colors.white),
                   Text(
-                      transaction.start,
+                      '  ${transaction.start}',
                       style: const TextStyle(color: Colors.white, fontSize: ft)
                   ),
                   const Spacer(),
+                  const Icon(Icons.directions_bus_filled_sharp, color: Colors.white),
                   Text(
-                      transaction.start,
+                      '  ${transaction.stop}',
                       style: const TextStyle(color: Colors.white, fontSize: ft)
                   ),
                 ],
@@ -90,8 +92,9 @@ class _UserListState extends State<TransactionList> {
               const SizedBox(height: 23),
               Row(
                 children: [
+                  const Spacer(),
                   Text(
-                      '${transaction.start} Liters',
+                      'Rs. ${transaction.amount.toString()}',
                       style: const TextStyle(color: Colors.white, fontSize: ft)
                   ),
                 ],
@@ -102,7 +105,7 @@ class _UserListState extends State<TransactionList> {
                   ElevatedButton(
                       onPressed: (){
                         Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-                          return Home();
+                          return const Home();
                         }));
                       },
                       style: ElevatedButton.styleFrom(
@@ -115,12 +118,13 @@ class _UserListState extends State<TransactionList> {
                   )
                 ],
               ),
+              const SizedBox(height: 9),
             ],
           ),
           onTap: () {
             getDataById();
             Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-              return Home();
+              return const Home();
             }));
           },
         ),
@@ -191,6 +195,8 @@ class _UserListState extends State<TransactionList> {
 
     var results = transaction.where('age', isGreaterThan: 20).get();
     
-    print(results);
+    if (kDebugMode) {
+      print(results);
+    }
   }
 }

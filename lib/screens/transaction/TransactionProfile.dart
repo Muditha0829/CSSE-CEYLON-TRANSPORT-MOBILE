@@ -24,6 +24,7 @@ class _TransactionProfileState extends State<TransactionProfile> {
   late SingleUser singleUser;
 
   late DocumentReference<Map<String, dynamic>> userData;
+  final double textBorder = 20;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +45,12 @@ class _TransactionProfileState extends State<TransactionProfile> {
         padding: const EdgeInsets.all(10),
         children: [
           const Center(
-            child: Text('Payment Page', style: TextStyle(fontSize: 30, color: Colors.blueGrey)),
+            child: Text('Payment Page', style: TextStyle(fontSize: 30, color: Colors.cyan)),
+          ),
+          const Image(
+              image: AssetImage(
+                  'assets/payment.jpg'
+              )
           ),
           const SizedBox(height: 30),
           Row(
@@ -60,37 +66,51 @@ class _TransactionProfileState extends State<TransactionProfile> {
             children: [
               // const Text('Amount:  ', style: TextStyle(fontSize: 22, color: Colors.blue)),
               SizedBox(
-                width: 300,
+                width: 340,
                 child: TextField(
                   controller: startController,
-                  decoration: const InputDecoration(hintText: 'Start Destination', labelText: 'Start Destination'),
+                  decoration: const InputDecoration(
+                      hintText: 'Start Destination',
+                      labelText: 'Start Destination',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20.0)))
+                  ),
                 ),
               ),
             ],
           ),
+          const SizedBox(height: 30),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // const Text('Amount:  ', style: TextStyle(fontSize: 22, color: Colors.blue)),
               SizedBox(
-                width: 300,
+                width: 340,
                 child:  TextField(
                   controller: stopController,
-                  decoration: const InputDecoration(hintText: 'Stop Destination', labelText: 'Stop Destination'),
+                  decoration: const InputDecoration(
+                      hintText: 'Stop Destination',
+                      labelText: 'Stop Destination',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20.0)))
+                  ),
                   keyboardType: TextInputType.text,
                 ),
               ),
             ],
           ),
+          const SizedBox(height: 30),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // const Text('Amount:  ', style: TextStyle(fontSize: 22, color: Colors.blue)),
               SizedBox(
-                width: 300,
+                width: 340,
                 child: TextField(
                   controller: amountController,
-                  decoration: const InputDecoration(hintText: 'Enter Amount', labelText: 'Amount'),
+                  decoration: const InputDecoration(
+                      hintText: 'Enter Amount',
+                      labelText: 'Amount',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20.0)))
+                  ),
                   keyboardType: TextInputType.number,
                 ),
               ),
@@ -101,6 +121,15 @@ class _TransactionProfileState extends State<TransactionProfile> {
           ),
           Center(
             child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.cyan,
+                onPrimary: Colors.white,
+                shadowColor: Colors.blueAccent,
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0)),
+                minimumSize: const Size(150, 50),
+              ),
               onPressed: () {
                 createTransaction(
                     start: startController.text,
@@ -108,7 +137,7 @@ class _TransactionProfileState extends State<TransactionProfile> {
                     amount: int.parse(amountController.text),
                 );
               },
-              child: const Text('Pay'),
+              child: const Text('Pay Now', style: TextStyle(fontSize: 20)),
             ),
           )
         ],
