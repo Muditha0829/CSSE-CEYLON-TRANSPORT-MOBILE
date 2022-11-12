@@ -9,7 +9,36 @@ class TransactionProfile extends StatefulWidget {
 
   final SingleUser singleUser;
 
-  const TransactionProfile(this.singleUser, {Key? key,}) : super(key: key);
+  TransactionProfile(this.singleUser, {Key? key,}) : super(key: key);
+  late int finalAmount = 0;
+
+  int createTransaction({required String start, required String stop, required int amount}) {
+
+    //final DocumentSnapshot<Map<String, dynamic>> snapshot;
+
+    if(int.parse(singleUser.amount) < amount){
+      //showMessage('Your Balance is Insufficient To Proceed.');
+      return finalAmount = 0;
+
+    }else{
+
+      //  FirebaseFirestore.instance.collection('userData').doc(singleUser.uid).update({
+      //   "amount": (int.parse(singleUser.amount) - amount).toString(),
+      // });
+
+      return finalAmount = (int.parse(singleUser.amount) - amount);
+
+      final transaction = FirebaseFirestore.instance.collection('transaction').doc();
+
+      final transactionProfile = TransactionModel(
+        id: transaction.id,
+        start: start,
+        stop: stop,
+        amount: amount,
+        passengerId: singleUser.uid,
+      );
+    }
+  }
 
   @override
   State<TransactionProfile> createState() => _TransactionProfileState();

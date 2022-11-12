@@ -1,5 +1,6 @@
 import 'package:bus_ticketing_system/screens/authenticate/email_sign_in.dart';
 import 'package:bus_ticketing_system/screens/home/profile.dart';
+import 'package:bus_ticketing_system/screens/transaction/AccountBalance.dart';
 import 'package:bus_ticketing_system/screens/transaction/GenerateQr.dart';
 import 'package:bus_ticketing_system/screens/transaction/ScanQr.dart';
 import 'package:bus_ticketing_system/screens/transaction/TransactionList.dart';
@@ -86,6 +87,14 @@ class _HomeState extends State<Home> {
                 moveToProfile();
                 Navigator.pop(context);
                 Navigator.push(context, MaterialPageRoute(builder: (_)=>  Profile(UserId)));
+              },
+            ),
+            ListTile(
+              title:  const Text('Account Balance',style: TextStyle(fontSize: 18)),
+              onTap: (){
+                moveToProfile();
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (_)=>  const AccountBalance()));
               },
             ),
             ListTile(
